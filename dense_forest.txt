@@ -1,0 +1,9 @@
+dense_forest
+howler monkey
+sloth
+chipmunk
+toucan
+leafcutter ant
+sloth
+tarantula
+pit viper
