@@ -14,6 +14,19 @@
 \usetikzlibrary{calc,shapes.multipart,chains,arrows,positioning,matrix}
 \usepackage{tikz-qtree}
 \usepackage{listings}
+\usepackage{listings}
+\usepackage{xcolor}
+% Either load specific libraries...
+\usepackage{tcolorbox}
+\tcbuselibrary{listings,skins,breakable}
+% ...or just do: \usepackage[most]{tcolorbox}
+
+\lstdefinestyle{textfile}{
+  basicstyle=\ttfamily\small,
+  frame=single,
+  showstringspaces=false,
+  breaklines=true,
+}
 \lstset{
   basicstyle=\ttfamily,
   frame=single,
@@ -37,10 +50,31 @@
 \begin{document}
 \maketitle
 
+\section*{Learning goals}
+By the end of this lab you will be able to:
+\begin{itemize}
+  \item Read plain-text files and parse simple data formats.
+  \item Use \textbf{sets} to compute intersection/union/difference efficiently.
+  \item Build a small \textbf{console} interface that parses user input.
+  \item Write and use a \textbf{generator} function.
+\end{itemize}
+
 \section{Introduction}
 
 In this lab, you will build a simple, console-based application that assists biologists in understanding the data collected during their ecological explorations. In each expedition, biologists visit a site and write down all of the species of animals that they see at that site. These lists are saved as .txt files, where the first line contains the name of the site (with no spaces), and all of the subsequent lines contain a species spotted at that site. Because these lists are created by humans and we can be forgetful, it's possible that species will appear multiple times in each file.
 
+
+\section{Data format}
+Each expedition produces a single \texttt{.txt} file with the following format:
+\begin{itemize}
+  \item \textbf{Line 1}: the \emph{site identifier} with no spaces (e.g., \texttt{dense\_forest}).
+  \item \textbf{Lines 2+}: one \emph{species name} per line. Species names may contain spaces.
+  \item Blank lines may appear and should be ignored.
+  \item Duplicate species may appear.
+  \item All matching and comparisons are \textbf{case-sensitive}.
+\end{itemize}
+
+Example files can be found in the Example scenario.
 
 \section{Example scenario}
 
@@ -55,8 +89,8 @@ Say four biologists took four different expeditions:
 They produced the following text files:
 
 \vspace{2mm}
-\texttt{cave\_rita.txt}:
-\begin{lstlisting}
+\begin{tcolorbox}[title=cave\_rita.txt]
+\begin{lstlisting}[style=textfile]
 cave
 pit viper
 bat
@@ -65,11 +99,12 @@ pit viper
 tarantula
 tadpole
 \end{lstlisting}
+\end{tcolorbox}
 
 
 \vspace{2mm}
-\texttt{dense\_forest\_lunara.txt}:
-\begin{lstlisting}
+\begin{tcolorbox}[title=dense\_forest\_lunara.txt]
+\begin{lstlisting}[style=textfile]
 dense_forest
 howler monkey
 sloth
@@ -80,10 +115,11 @@ sloth
 tarantula
 pit viper
 \end{lstlisting}
+\end{tcolorbox}
 
 \vspace{2mm}
-\texttt{dense\_forest\_claudia.txt}:
-\begin{lstlisting}
+\begin{tcolorbox}[title=dense\_forest\_claudia.txt]
+\begin{lstlisting}[style=textfile]
 dense_forest
 sloth
 toucan
@@ -91,10 +127,11 @@ leafcutter ant
 tarantula
 white-faced capuchin
 \end{lstlisting}
+\end{tcolorbox}
 
 \vspace{2mm}
-\texttt{volcano\_daniel.txt}:
-\begin{lstlisting}
+\begin{tcolorbox}[title=volcano\_daniel.txt]
+\begin{lstlisting}[style=textfile]
 volcano
 tarantula
 parrot
@@ -103,10 +140,11 @@ leafcutter ant
 tarantula
 grasshopper
 \end{lstlisting}
+\end{tcolorbox}
 
 
 \section{Software requirements}
-One text file is created for each site expedition The first line of the text file contains the name of the site, and each subsequent line contains a species spotted at that site. The software should read the contents of these text files and store the site and species data in the appropriate data structures. After \usepackage{}texttt{ecological\_survey.py} is run, the user should be presented with the following message in the console.
+One text file is created for each site expedition The first line of the text file contains the name of the site, and each subsequent line contains a species spotted at that site. The software should read the contents of these text files and store the site and species data in the appropriate data structures. After \texttt{ecological\_survey.py} is run, the user should be presented with the following message in the console.
 
 \begin{lstlisting}
 What would you like to do? Enter one of the following commands:
