@@ -1,4 +1,4 @@
-dense_forest
+dense forest
 sloth
 toucan
 leafcutter ant

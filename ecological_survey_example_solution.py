@@ -107,7 +107,7 @@ def run_ecological_survey():
             try:
                 species_sets = [site_species_dict[site] for site in sites]
             except KeyError:
-                print(f"One of the provided arguments was invalid: {sites}")
+                print(f"At least one of the provided arguments was invalid: {sites}")
                 continue
             except:
                 print("Something went wrong.")
@@ -122,7 +122,7 @@ def run_ecological_survey():
             try:
                 species_sets = [site_species_dict[site] for site in sites]
             except KeyError:
-                print(f"One of the provided arguments was invalid: {sites}")
+                print(f"At least one of the provided arguments was invalid: {sites}")
                 continue
             except:
                 print("Something went wrong.")
@@ -133,14 +133,14 @@ def run_ecological_survey():
         elif user_input[:6] == "unique":
             site = get_arguments(user_input[6:])
             if len(site) != 1:
-                print(f"The `unique` command expected one argument. Received: {len(site)}. Enter `help` for more information.")
+                print(f"The `unique` command expected one argument. Received: {len(site)}. Enter 'help' for more information.")
                 continue
             site = site[0]
             other_species_sets = [site_species_dict[s] for s in list(site_species_dict.keys()) if s != site]
             try:
                 site_species = site_species_dict[site]
             except KeyError:
-                print(f"One of the provided arguments was invalid: {site}")
+                print(f"At least one of the provided arguments was invalid: {site}")
                 continue
             except:
                 print("Something went wrong.")
@@ -162,6 +162,9 @@ def run_ecological_survey():
 
         elif user_input == 'h' or user_input == 'help':
             print(INSTRUCTIONS)
+
+        else:
+            print("That was not recognized as a command. Please try again or enter 'help' for more support.")
 
     print("Goodbye.")
 

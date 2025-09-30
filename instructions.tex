@@ -42,7 +42,7 @@
   tabsize=2
 }
 
-\title{Ecological Survey Tool}
+\title{Ecological Survey Tool Assignment}
 
 \date{}
 \author{Mario Jerez}
@@ -50,25 +50,26 @@
 \begin{document}
 \maketitle
 
-\section*{Learning goals}
-By the end of this lab you will be able to:
+\section*{Learning objectives}
+This laboratory is intended to give you practice with a few core skills:
 \begin{itemize}
-  \item Read plain-text files and parse simple data formats.
-  \item Use \textbf{sets} to compute intersection/union/difference efficiently.
-  \item Build a small \textbf{console} interface that parses user input.
-  \item Write and use a \textbf{generator} function.
+  \item Reading data from plain-text files and representing them using Python dictionaries and sets.
+  \item Using \textbf{sets} to compute intersection/union/difference efficiently.
+  \item Building a small \textbf{console} interface that parses user input and handles user error without crashing.
+  \item Using conditionals to redirect flow to the right function calls with the correct parameters.
+  \item Writing and using a \textbf{generator} function.
 \end{itemize}
 
 \section{Introduction}
 
-In this lab, you will build a simple, console-based application that assists biologists in understanding the data collected during their ecological explorations. In each expedition, biologists visit a site and write down all of the species of animals that they see at that site. These lists are saved as .txt files, where the first line contains the name of the site (with no spaces), and all of the subsequent lines contain a species spotted at that site. Because these lists are created by humans and we can be forgetful, it's possible that species will appear multiple times in each file.
+In this lab, you will build a simple, console-based application that assists biologists in understanding the data collected during their ecological explorations. In each expedition, biologists visit a site and write down all of the species of animals that they see at that site. These lists are saved as .txt files, where the first line contains the name of the site, and all of the subsequent lines contain a species spotted at that site. Because these lists are created by humans and we can be forgetful, it's possible that species will appear multiple times in each file.
 
 
 \section{Data format}
 Each expedition produces a single \texttt{.txt} file with the following format:
 \begin{itemize}
-  \item \textbf{Line 1}: the \emph{site identifier} with no spaces (e.g., \texttt{dense\_forest}).
-  \item \textbf{Lines 2+}: one \emph{species name} per line. Species names may contain spaces.
+  \item \textbf{Line 1}: \emph{Name of site}.
+  \item \textbf{Lines 2+}: one \emph{species name} per line.
   \item Blank lines may appear and should be ignored.
   \item Duplicate species may appear.
   \item All matching and comparisons are \textbf{case-sensitive}.
@@ -105,7 +106,7 @@ tadpole
 \vspace{2mm}
 \begin{tcolorbox}[title=dense\_forest\_lunara.txt]
 \begin{lstlisting}[style=textfile]
-dense_forest
+dense forest
 howler monkey
 sloth
 chipmunk
@@ -120,7 +121,7 @@ pit viper
 \vspace{2mm}
 \begin{tcolorbox}[title=dense\_forest\_claudia.txt]
 \begin{lstlisting}[style=textfile]
-dense_forest
+dense forest
 sloth
 toucan
 leafcutter ant
@@ -144,7 +145,7 @@ grasshopper
 
 
 \section{Software requirements}
-One text file is created for each site expedition The first line of the text file contains the name of the site, and each subsequent line contains a species spotted at that site. The software should read the contents of these text files and store the site and species data in the appropriate data structures. After \texttt{ecological\_survey.py} is run, the user should be presented with the following message in the console.
+One text file is created for each site expedition. The first line of the text file contains the name of the site, and each subsequent line contains a species spotted at that site. The software should read the contents of these text files and store the site and species data in the appropriate data structures. After \texttt{ecological\_survey.py} is run, the user should be presented with the following message in the console.
 
 \begin{lstlisting}
 What would you like to do? Enter one of the following commands:
@@ -182,7 +183,7 @@ The \texttt{sites} command shows all sites that are available. In the example sc
 Expected console behavior:
 \begin{lstlisting}
 Enter command: sites
-dense_forest
+dense forest
 volcano
 cave
 Enter command: 
@@ -193,9 +194,9 @@ The \texttt{common} command can take any number of sites as arguments. It shows 
 
 Expected console behavior for the example scenario:
 \begin{lstlisting}
-Enter command: common cave, dense_forest
-tarantula
+Enter command: common cave, dense forest
 pit viper
+tarantula
 leafcutter ant
 Enter command: 
 \end{lstlisting}
@@ -206,13 +207,13 @@ The \texttt{combined} command can take any number of sites as arguments. It show
 Expected console behavior for the example scenario:
 \begin{lstlisting}
 Enter command: combined volcano, cave
-tarantula
-bat
 leafcutter ant
+bat
 pit viper
 tadpole
-parrot
+tarantula
 grasshopper
+parrot
 Enter command: 
 \end{lstlisting}
 
@@ -221,11 +222,9 @@ The \texttt{unique} command takes one site as an argument. It shows the species 
 
 Expected console behavior for the example scenario:
 \begin{lstlisting}
-Enter command: unique
-The `unique` command expected one argument. Received: 0. Enter `help` for more information.
 Enter command: unique cave
-bat
 tadpole
+bat
 Enter command: 
 \end{lstlisting}
 
@@ -234,12 +233,8 @@ The \texttt{species\_in} command takes one species as an argument. It shows all 
 
 Expected console behavior for the example scenario:
 \begin{lstlisting}
-Enter command: species_in
-The `species_in` command expected one argument. Received: 0. Enter `help` for more information.
-Enter command: species_in bat
-cave
 Enter command: species_in leafcutter ant
-dense_forest
+dense forest
 volcano
 cave
 Enter command: 
@@ -287,6 +282,30 @@ What would you like to do? Enter one of the following commands:
    Show these instructions again.
 \end{lstlisting}
 
+\subsection{User error handling}
+When the user makes a mistake, the program should not crash. Instead, it should provide the user with a user-friendly error message that allows them to try again. Verify that you account for the possibility of typos in commands or in arguments provided. Here are some examples (your messages don't have to match mine):
+\begin{lstlisting}
+Enter command: uniqu cave
+That was not recognized as a command. Please try again or enter 'help' for 
+more support.
+Enter command: unique
+The `unique` command expected one argument. Received: 0. Enter 'help' for 
+more information.
+Enter command: unique cave
+bat
+tadpole
+Enter command: 
+\end{lstlisting}
+
+\begin{lstlisting}
+Enter command: common cave, dense forets 
+At least one of the provided arguments was invalid: ['cave', 'dense forets']
+Enter command: common cave, dense forest
+leafcutter ant
+tarantula
+pit viper
+Enter command: 
+\end{lstlisting}
 
 \section{Submission requirements}
 For a program of this scale and larger, it is important to break up the task into modular components (functions). While there are many ways to make this software, please begin with the starter code provided and fill in the functions in the following order. Feel free to create helper functions along the way. Once you finish, test your software, making sure that it is behaving as expected. Note that the software should be runnable by entering \texttt{python3 ecological\_survey.py} in the console. Then, at the top of the Python file as a comment, write a reflection on why you think sets are more appropriate for representing species spotted at sites than lists would be.
