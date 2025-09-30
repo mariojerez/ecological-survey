@@ -1,0 +1,279 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{fullpage}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{tikzmark}
+\usetikzlibrary{calc,shapes.multipart,chains,arrows,positioning,matrix}
+\usepackage{tikz-qtree}
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily,
+  frame=single,
+  showstringspaces=false
+}
+
+\setlist{noitemsep}
+
+\lstset{
+  basicstyle=\footnotesize\ttfamily, %or \small or \footnoteize etc.
+  language=java,
+  showstringspaces=false,
+  tabsize=2
+}
+
+\title{Ecological Survey Tool}
+
+\date{}
+\author{Mario Jerez}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+In this lab, you will build a simple, console-based application that assists biologists in understanding the data collected during their ecological explorations. In each expedition, biologists visit a site and write down all of the species of animals that they see at that site. These lists are saved as .txt files, where the first line contains the name of the site (with no spaces), and all of the subsequent lines contain a species spotted at that site. Because these lists are created by humans and we can be forgetful, it's possible that species will appear multiple times in each file.
+
+
+\section{Example scenario}
+
+Say four biologists took four different expeditions:
+\begin{itemize}
+    \item Rita went to a \texttt{cave}
+    \item Lunara went to a \texttt{dense\_forest}
+    \item Claudia went to a \texttt{dense\_forest}
+    \item Daniel went to a \texttt{volcano}
+\end{itemize}
+\vspace{2mm}
+They produced the following text files:
+
+\vspace{2mm}
+\texttt{cave\_rita.txt}:
+\begin{lstlisting}
+cave
+pit viper
+bat
+leafcutter ant
+pit viper
+tarantula
+tadpole
+\end{lstlisting}
+
+
+\vspace{2mm}
+\texttt{dense\_forest\_lunara.txt}:
+\begin{lstlisting}
+dense_forest
+howler monkey
+sloth
+chipmunk
+toucan
+leafcutter ant
+sloth
+tarantula
+pit viper
+\end{lstlisting}
+
+\vspace{2mm}
+\texttt{dense\_forest\_claudia.txt}:
+\begin{lstlisting}
+dense_forest
+sloth
+toucan
+leafcutter ant
+tarantula
+white-faced capuchin
+\end{lstlisting}
+
+\vspace{2mm}
+\texttt{volcano\_daniel.txt}:
+\begin{lstlisting}
+volcano
+tarantula
+parrot
+pit viper
+leafcutter ant
+tarantula
+grasshopper
+\end{lstlisting}
+
+
+\section{Software requirements}
+One text file is created for each site expedition The first line of the text file contains the name of the site, and each subsequent line contains a species spotted at that site. The software should read the contents of these text files and store the site and species data in the appropriate data structures. After \usepackage{}texttt{ecological\_survey.py} is run, the user should be presented with the following message in the console.
+
+\begin{lstlisting}
+What would you like to do? Enter one of the following commands:
+
+ - sites
+   Show available sites
+
+ - common <site1>, <site2>, ..., <siteN>  
+   Show species found in all of the listed sites.  
+   If no sites are given, shows species common to all sites.
+
+ - combined <site1>, <site2>, ..., <siteN>  
+   Show species found in any of the listed sites.  
+   If no sites are given, shows all species.
+
+ - unique <site>  
+   Show species found only in the specified site (not in others).
+
+ - species_in <species>
+   Show sites that species is found in.
+
+ - q or quit  
+   Exit the program.
+
+ - h or help  
+   Show these instructions again.
+
+\end{lstlisting}
+
+The user should then be able to enter any of the commands into the console and get the expected response. Read on for more information on these commands.
+
+\subsection{sites command}
+The \texttt{sites} command shows all sites that are available. In the example scenario, these are \texttt{dense\_forest}, \texttt{cave}, and \texttt{volcano}.
+
+Expected console behavior:
+\begin{lstlisting}
+Enter command: sites
+dense_forest
+volcano
+cave
+Enter command: 
+\end{lstlisting}
+
+\subsection{common command}
+The \texttt{common} command can take any number of sites as arguments. It shows the species that are common to all of the sites provided. If no arguments are provided, it should show species that are common to all sites.
+
+Expected console behavior for the example scenario:
+\begin{lstlisting}
+Enter command: common cave, dense_forest
+tarantula
+pit viper
+leafcutter ant
+Enter command: 
+\end{lstlisting}
+
+\subsection{combined command}
+The \texttt{combined} command can take any number of sites as arguments. It shows the species found in any of the sites provided, i.e., the union of the sets of species for each site provided. If no arguments are provided, it should show all species discovered across all expeditions.
+
+Expected console behavior for the example scenario:
+\begin{lstlisting}
+Enter command: combined volcano, cave
+tarantula
+bat
+leafcutter ant
+pit viper
+tadpole
+parrot
+grasshopper
+Enter command: 
+\end{lstlisting}
+
+\subsection{unique command}
+The \texttt{unique} command takes one site as an argument. It shows the species that are unique to that site, i.e., that can only be found at that site.
+
+Expected console behavior for the example scenario:
+\begin{lstlisting}
+Enter command: unique
+The `unique` command expected one argument. Received: 0. Enter `help` for more information.
+Enter command: unique cave
+bat
+tadpole
+Enter command: 
+\end{lstlisting}
+
+\subsection{species\_in command}
+The \texttt{species\_in} command takes one species as an argument. It shows all of the sites where this species has been found.
+
+Expected console behavior for the example scenario:
+\begin{lstlisting}
+Enter command: species_in
+The `species_in` command expected one argument. Received: 0. Enter `help` for more information.
+Enter command: species_in bat
+cave
+Enter command: species_in leafcutter ant
+dense_forest
+volcano
+cave
+Enter command: 
+\end{lstlisting}
+
+\subsection{quit command}
+The \texttt{quit} command shows a goodbye message to the user and ends the program. It can be executed by entering \texttt{quit} or just \texttt{q}.
+
+Expected console behavior:
+\begin{lstlisting}
+Enter command: q
+Goodbye.
+\end{lstlisting}
+
+\subsection{help command}
+The \texttt{help} command shows information on the available commands to the user. This should be the same set of instructions shown when the user runs the program. It can be executed by entering \texttt{help} or just \texttt{h}.
+
+Expected console behavior:
+\begin{lstlisting}
+Enter command: help
+
+What would you like to do? Enter one of the following commands:
+
+ - sites
+   Show available sites
+
+ - common <site1>, <site2>, ..., <siteN>  
+   Show species found in all of the listed sites.  
+   If no sites are given, shows species common to all sites.
+
+ - combined <site1>, <site2>, ..., <siteN>  
+   Show species found in any of the listed sites.  
+   If no sites are given, shows all species.
+
+ - unique <site>  
+   Show species found only in the specified site (not in others).
+
+ - species_in <species>
+   Show sites that species is found in.
+
+ - q or quit  
+   Exit the program.
+
+ - h or help  
+   Show these instructions again.
+\end{lstlisting}
+
+
+\section{Submission requirements}
+For a program of this scale and larger, it is important to break up the task into modular components (functions). While there are many ways to make this software, please begin with the starter code provided and fill in the functions in the following order. Feel free to create helper functions along the way. Once you finish, test your software, making sure that it is behaving as expected. Note that the software should be runnable by entering \texttt{python3 ecological\_survey.py} in the console. Then, at the top of the Python file as a comment, write a reflection on why you think sets are more appropriate for representing species spotted at sites than lists would be.
+
+\subsection{process\_site\_files(file\_path)}
+This function should take a list of file paths (strings) as an argument. For each file path, it should read the .txt file, extract the site name, species spotted, and return a dictionary where the keys are the sites, and the values are sets of species.
+
+\subsection{get\_arguments(user\_input)}
+This function should take a string as input which represents one or multiple arguments that a user provided, separated by commas. The function should separate the arguments and return a list of strings, where each item in the list is a different argument. For example, if user\_input = " cave, dense\_forest, volcano", it should return the list ["cave", "dense\_forest", "volcano"].
+
+\subsection{species\_in(species, sites\_species\_dict)}
+This generator function should take a species and a dictionary mapping sites to sets of species as arguments. It should then \emph{yield} sites where the species has been spotted.
+
+\subsection{unique(site\_species, *other\_site\_species)}
+This function should take \texttt{site\_species}, a set of species found in a site of interest, and any number of \texttt{other\_site\_species} arguments which represent sets of species from other sites. It should return a set of species that are only found in \texttt{site\_species} and not in any of the \texttt{other\_site\_species}.
+
+\subsection{common(*species\_sets)}
+This function takes any number of sets of species. It should return a set containing only the species that are found in all of the sets, i.e., the intersection of all sets.
+
+\subsection{combined(*species\_sets)}
+This function takes any number of sets of species. It should return a set containing all species found across all sets, i.e., the union of all sets.
+
+\subsection{run\_ecological\_survey()}
+This function is responsible for processing the expedition text files and representing that data in the appropriate Python data structures. Use the pre-written \texttt{get\_expedition\_files()} function to get a list of file paths for the expedition files. Then use the appropriate function that you wrote to process the data into a data structure.
+
+Then, provide the user with instructions on what commands are available to them, and handle user commands so that the software makes the appropriate responses. Closely reference the software requirements section and the expected console behavior examples while working on this.
+
+\end{document}
